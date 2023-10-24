@@ -66,6 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (!isValid) {
           e.preventDefault();
       }
+      alert("Registro exitoso")
   });
 
   // Validación en tiempo real 
