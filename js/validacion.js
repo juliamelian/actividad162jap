@@ -1,129 +1,82 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const form = document.querySelector("form");
-  const nombre = document.getElementById("nombre");
-  const apellido = document.getElementById("apellido");
-  const email = document.getElementById("email");
-  const password1 = document.getElementById("password1");
-  const password2 = document.getElementById("password2");
-  const terminos = document.getElementById("terminos");
+// CÓDIGO COPIADO DE https://getbootstrap.com/docs/5.0/forms/validation/
+// Example starter JavaScript for disabling form submissions if there are invalid fields
+(function () {
+    'use strict'
 
-  form.addEventListener("submit", function (e) {
-      let isValid = true;
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.querySelectorAll('.needs-validation')
 
-      if (nombre.value.trim() === "") {
-          isValid = false;
-          nombre.classList.add("is-invalid");
-          nombre.setCustomValidity("Por favor, ingrese su nombre.");
-      } else {
-          nombre.classList.remove("is-invalid");
-          nombre.setCustomValidity("");
-      }
+    // Loop over them and prevent submission
+    Array.prototype.slice.call(forms)
+        .forEach(function (form) {
+            form.addEventListener('submit', function (event) {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                    // Chequea que el checkbox de términos y condiciones esté marcado y si no, 
+                    // muestra el mensaje de error fuera del modal y pinta el texto de rojo
+                    if (!checkbox.checked) {
+                        document.getElementById('error-message').style.display = 'block';
+                        modal.classList.add("text-danger");
+                    }
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+})()
 
-      if (apellido.value.trim() === "") {
-          isValid = false;
-          apellido.classList.add("is-invalid");
-          apellido.setCustomValidity("Por favor, ingrese su apellido.");
-      } else {
-          apellido.classList.remove("is-invalid");
-          apellido.setCustomValidity("");
-      }
+const password1 = document.getElementById("password1");
+const password2 = document.getElementById("password2");
+const email = document.getElementById("email");
+const form = document.getElementById("form");
+const checkbox = document.getElementById("terminos");
+const modal = document.getElementById("mostrarModal");
+const nombre = document.getElementById("nombre");
+const apellido = document.getElementById("apellido");
 
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      if (!emailPattern.test(email.value)) {
-          isValid = false;
-          email.classList.add("is-invalid");
-          email.setCustomValidity("Ingrese un correo electrónico válido.");
-      } else {
-          email.classList.remove("is-invalid");
-          email.setCustomValidity("");
-      }
 
-      if (password1.value.length < 6) {
-          isValid = false;
-          password1.classList.add("is-invalid");
-          password1.setCustomValidity("La contraseña debe tener al menos 6 caracteres.");
-      } else {
-          password1.classList.remove("is-invalid");
-          password1.setCustomValidity("");
-      }
+// Chequea que las passwords coincidan
+password2.addEventListener("input", function () {
+    if (password1.checkValidity() && password1.value === password2.value) {
+        password2.setCustomValidity("");
+    } else {
+        password2.setCustomValidity("Debe ser igual a contraseña");
+    }
+})
+password1.addEventListener("input", function () {
+    if (password1.checkValidity() && password1.value === password2.value) {
+        password2.setCustomValidity("");
+    } else {
+        password2.setCustomValidity("Debe ser igual a 'contraseña'");
+    }
+})
 
-      if (password1.value !== password2.value) {
-          isValid = false;
-          password2.classList.add("is-invalid");
-          password2.setCustomValidity("Las contraseñas no coinciden.");
-      } else {
-          password2.classList.remove("is-invalid");
-          password2.setCustomValidity("");
-      }
-
-      if (!terminos.checked) {
-          isValid = false;
-          terminos.classList.add("is-invalid");
-      } else {
-          terminos.classList.remove("is-invalid");
-      }
-
-      if (!isValid) {
-          e.preventDefault();
-      }
-      alert("Registro exitoso")
-  });
-
-  // Validación en tiempo real 
-  nombre.addEventListener("input", function () {
-      if (nombre.value.trim() === "") {
-          nombre.classList.add("is-invalid");
-          nombre.setCustomValidity("Por favor, ingrese su nombre.");
-      } else {
-          nombre.classList.remove("is-invalid");
-          nombre.setCustomValidity("");
-      }
-  });
-
-  apellido.addEventListener("input", function () {
-      if (apellido.value.trim() === "") {
-          apellido.classList.add("is-invalid");
-          apellido.setCustomValidity("Por favor, ingrese su apellido.");
-      } else {
-          apellido.classList.remove("is-invalid");
-          apellido.setCustomValidity("");
-      }
-  });
-
-  email.addEventListener("input", function () {
-      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-      if (!emailPattern.test(email.value)) {
-          email.classList.add("is-invalid");
-          email.setCustomValidity("Ingrese un correo electrónico válido.");
-      } else {
-          email.classList.remove("is-invalid");
-          email.setCustomValidity("");
-      }
-  });
-
-  password1.addEventListener("input", function () {
-      if (password1.value.length < 6) {
-          password1.classList.add("is-invalid");
-          password1.setCustomValidity("La contraseña debe tener al menos 6 caracteres.");
-      } else {
-          password1.classList.remove("is-invalid");
-          password1.setCustomValidity("");
-      }
-  });
-
-  password2.addEventListener("input", function () {
-      if (password1.value !== password2.value) {
-          password2.classList.add("is-invalid");
-          password2.setCustomValidity("Las contraseñas no coinciden.");
-      } else {
-          password2.classList.remove("is-invalid");
-          password2.setCustomValidity("");
-      }
-  });
-
-  terminos.addEventListener("change", function () {
-      if (terminos.checked) {
-          terminos.classList.remove("is-invalid");
-      }
-  });
+// Despliega el modal al hacer click en "términos y condiciones"
+modal.addEventListener('click', function () {
+    $('#miModal').modal('show');
 });
+
+// Restablece los campos al enviar el formulario 
+form.addEventListener("submit", function (event) {
+    if (form.checkValidity()) {
+        form.reset();
+        form.classList.remove('was-validated');
+        event.preventDefault();
+        event.stopPropagation();
+    }
+});
+
+// Oculta/muestra el mensaje de error fuera del modal al marcar/desmarcar el checkbox
+checkbox.addEventListener("click", function () {
+    if (!checkbox.checked) {
+        // Muestra el mensaje de error fuera del modal
+        document.getElementById('error-message').style.display = 'block';
+        modal.classList.add("text-danger");
+    } else {
+        // Si el checkbox está marcado, oculta el mensaje de error y envía el formulario
+        document.getElementById('error-message').style.display = 'none';
+        modal.classList.remove("text-danger");
+    }
+})
+
+
