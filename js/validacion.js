@@ -1,62 +1,135 @@
-
-function showAlertSuccess() {
-    document.getElementById("alert-success").classList.add("show");
-
-    const alertSuccess = document.getElementById("alert-success");
-    alertSuccess.classList.add("show");
-    setTimeout(function() {
-        alertSuccess.classList.remove("show");
-    },3000);
-
-    // Restablecer los valores de los campos del formulario
-    document.getElementById("nombre").value = "";
-    document.getElementById("apellido").value = "";
-    document.getElementById("email").value = "";
-    document.getElementById("password1").value = "";
-    document.getElementById("password2").value = "";
-    document.getElementById("terminos").checked = false;
-}
-
-function showAlertError() {
-    document.getElementById("alert-danger").classList.add("show");
-    const alertError = document.getElementById("alert-danger");
-    alertError.classList.add("show");
-    setTimeout(function() {
-        alertError.classList.remove("show");
-    }, 3000);
-}
-
-const registroBtn = document.getElementById("regBtn");
-registroBtn.addEventListener("click", validarRegistro);
-
-
-function validarRegistro() {
-    const nombre = document.getElementById("nombre").value;
-    const apellido = document.getElementById("apellido").value;
-    const email = document.getElementById("email").value;
-    const password1 = document.getElementById("password1").value;
-    const password2 = document.getElementById("password2").value;
-    const terminos = document.getElementById("terminos").checked;
-
-
-    if (
-        nombre.trim() === "" ||
-        apellido.trim() === "" ||
-        email.trim() === "" ||
-        password1.trim() === "" ||
-        password2.trim() === "" ||
-        !terminos
-    ) {
-        showAlertError();
-        return;
-    }
-
-    if (password1.length < 6 ||password1 !== password2) {
-        showAlertError();
-        return;
-    }
-
-    showAlertSuccess();
-
-}
-
+document.addEventListener("DOMContentLoaded", function () {
+    const form = document.querySelector("form");
+    const nombre = document.getElementById("nombre");
+    const apellido = document.getElementById("apellido");
+    const email = document.getElementById("email");
+    const password1 = document.getElementById("password1");
+    const password2 = document.getElementById("password2");
+    const terminos = document.getElementById("terminos");
+  
+    form.addEventListener("submit", function (e) {
+      let isValid = true;
+  
+      // Validación de campo Nombre
+      if (nombre.value.trim() === "") {
+        isValid = false;
+        nombre.classList.add("is-invalid");
+        nombre.setCustomValidity("Por favor, ingrese su nombre.");
+      } else {
+        nombre.classList.remove("is-invalid");
+        nombre.setCustomValidity("");
+      }
+  
+      // Validación de campo Apellido
+      if (apellido.value.trim() === "") {
+        isValid = false;
+        apellido.classList.add("is-invalid");
+        apellido.setCustomValidity("Por favor, ingrese su apellido.");
+      } else {
+        apellido.classList.remove("is-invalid");
+        apellido.setCustomValidity("");
+      }
+  
+      // Validación de campo Email
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!emailPattern.test(email.value)) {
+        isValid = false;
+        email.classList.add("is-invalid");
+        email.setCustomValidity("Ingrese un correo electrónico válido.");
+      } else {
+        email.classList.remove("is-invalid");
+        email.setCustomValidity("");
+      }
+  
+      // Validación de Contraseña (mínimo 6 caracteres)
+      if (password1.value.length < 6) {
+        isValid = false;
+        password1.classList.add("is-invalid");
+        password1.setCustomValidity("La contraseña debe tener al menos 6 caracteres.");
+      } else {
+        password1.classList.remove("is-invalid");
+        password1.setCustomValidity("");
+      }
+  
+      // Validación de Repetir Contraseña (igualdad)
+      if (password1.value !== password2.value) {
+        isValid = false;
+        password2.classList.add("is-invalid");
+        password2.setCustomValidity("Las contraseñas no coinciden.");
+      } else {
+        password2.classList.remove("is-invalid");
+        password2.setCustomValidity("");
+      }
+  
+      // Validación de checkbox de Términos y Condiciones
+      if (!terminos.checked) {
+        isValid = false;
+        terminos.classList.add("is-invalid");
+      } else {
+        terminos.classList.remove("is-invalid");
+      }
+  
+      if (!isValid) {
+        e.preventDefault(); // Evita que el formulario se envíe si no cumple con las validaciones
+      }
+    });
+  
+    // Validación en tiempo real para los campos
+    nombre.addEventListener("input", function () {
+      if (nombre.value.trim() === "") {
+        nombre.classList.add("is-invalid");
+        nombre.setCustomValidity("Por favor, ingrese su nombre.");
+      } else {
+        nombre.classList.remove("is-invalid");
+        nombre.setCustomValidity("");
+      }
+    });
+  
+    apellido.addEventListener("input", function () {
+      if (apellido.value.trim() === "") {
+        apellido.classList.add("is-invalid");
+        apellido.setCustomValidity("Por favor, ingrese su apellido.");
+      } else {
+        apellido.classList.remove("is-invalid");
+        apellido.setCustomValidity("");
+      }
+    });
+  
+    email.addEventListener("input", function () {
+      const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+      if (!emailPattern.test(email.value)) {
+        email.classList.add("is-invalid");
+        email.setCustomValidity("Ingrese un correo electrónico válido.");
+      } else {
+        email.classList.remove("is-invalid");
+        email.setCustomValidity("");
+      }
+    });
+  
+    password1.addEventListener("input", function () {
+      if (password1.value.length < 6) {
+        password1.classList.add("is-invalid");
+        password1.setCustomValidity("La contraseña debe tener al menos 6 caracteres.");
+      } else {
+        password1.classList.remove("is-invalid");
+        password1.setCustomValidity("");
+      }
+    });
+  
+    password2.addEventListener("input", function () {
+      if (password1.value !== password2.value) {
+        password2.classList.add("is-invalid");
+        password2.setCustomValidity("Las contraseñas no coinciden.");
+      } else {
+        password2.classList.remove("is-invalid");
+        password2.setCustomValidity("");
+      }
+    });
+  
+    terminos.addEventListener("change", function () {
+      if (terminos.checked) {
+        terminos.classList.remove("is-invalid");
+      }
+    });
+  });
+  
