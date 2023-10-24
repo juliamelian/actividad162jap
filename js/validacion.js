@@ -60,6 +60,7 @@ modal.addEventListener('click', function () {
 form.addEventListener("submit", function (event) {
     if (form.checkValidity()) {
         form.reset();
+        alert("Registro exitoso")
         form.classList.remove('was-validated');
         event.preventDefault();
         event.stopPropagation();
